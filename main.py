@@ -1,36 +1,77 @@
 import numpy as np
-import sys
+
 
 def arrayPrint(a):
     for x in range(len(a)):
-        print(a[x])
+        for y in range(len(a[x])):
+            print a[x][y],
+
+        print
+
 
 def checkBoard(a):
     xp = a[0][0]
     for x in range(len(a)):
-        if(x != xp):
-            return True
+        for y in range(len(a[x])):
+            if a[x][y] != xp:
+                return True
+            xp = a[x][y]
+
     return False
-#def flip(a):
 
 
+def bruteForce(array):
+    count = 0
+
+    while checkBoard(array):
+        x = np.random.randint(4)
+        y = np.random.randint(4)
+
+        array = flip(array, x, y)
+        count += 1
+    return array, count
 
 
-posible = ("b", "w")
-lineCount = 0
+def flip(array, xPos, yPos):
+    if array[xPos][yPos] == "b":
+        array[xPos][yPos] = "w"
+    else:
+        array[xPos][yPos] = "b"
+
+    if xPos < 3 and array[xPos + 1][yPos] == "b":
+        array[xPos + 1][yPos] = "w"
+    elif xPos < 3:
+        array[xPos + 1][yPos] = "b"
+
+    if xPos < 0 and array[xPos - 1][yPos] == "b":
+        array[xPos - 1][yPos] = "w"
+    elif xPos < 0:
+        array[xPos - 1][yPos] = "b"
+
+    if yPos < 3 and array[xPos][yPos + 1] == "b":
+        array[xPos][yPos + 1] = "w"
+    elif yPos < 3:
+        array[xPos][yPos + 1] = "b"
+
+    if yPos < 0 and array[xPos][yPos - 1] == "b":
+        array[xPos][yPos - 1] = "w"
+    elif yPos < 0:
+        array[xPos][yPos - 1] = "b"
+
+    return array
+
+
 playBoard = [[0 for x in range(4)] for y in range(4)]  # initalize array
-
-for i in range(16):  # generate random b/w
-    playBoard[lineCount][i - (4 * lineCount)] = posible[np.random.randint(2)]
-    var = playBoard[lineCount][i - 4 * lineCount]
-    if (i + 1) % 4 == 0:
-        lineCount += 1
+colorSet = "b", "w"
+for x in range(len(playBoard)):
+    for y in range(len(playBoard[x])):
+        playBoard[x][y] = colorSet[np.random.randint(2)]
 
 arrayPrint(playBoard)
-
-print(x,y)
-while checkBoard(playBoard):
-    x = np.random.randint(4)
-    y = np.random.randint(4)
+myArray,myCount = bruteForce(playBoard)
 
 
+print 'completed this shit in',
+print myCount,
+print 'tries'
+arrayPrint(myArray)
