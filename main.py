@@ -1,12 +1,13 @@
 import numpy as np
-
+import copy
+import time
 
 def arrayPrint(a):
     for x in range(len(a)):
         for y in range(len(a[x])):
             print a[x][y],
 
-        print
+        print()
 
 
 def checkBoard(a):
@@ -22,12 +23,11 @@ def checkBoard(a):
 
 def bruteForce(array):
     count = 0
-
     while checkBoard(array):
         x = np.random.randint(4)
         y = np.random.randint(4)
 
-        array = flip(array, x, y)
+        flip(array, x, y)
         count += 1
     return array, count
 
@@ -66,12 +66,19 @@ colorSet = "b", "w"
 for x in range(len(playBoard)):
     for y in range(len(playBoard[x])):
         playBoard[x][y] = colorSet[np.random.randint(2)]
-
+myCount=101
+tries = 0
 arrayPrint(playBoard)
-myArray,myCount = bruteForce(playBoard)
-
-
-print 'completed this shit in',
+tic = time.clock()
+while myCount > 100:
+    tmp = copy.deepcopy(playBoard)
+    myArray, myCount = bruteForce(tmp)
+    tries += 1
+toc = time.clock()
+print toc-tic,
+print ' seconds'
+print'completed in ',
 print myCount,
 print 'tries'
-arrayPrint(myArray)
+print tries
+arrayPrint(playBoard)
